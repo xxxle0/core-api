@@ -2,13 +2,12 @@ package coreapi
 
 type CoreAPIClient struct {
 	baseURL      string
-	Scans        IScanAPI
-	Repositories IRepositoryAPI
+	scans        IScanAPI
+	repositories IRepositoryAPI
 }
 
 type ICoreAPIClient interface {
-	IScanAPI
-	IRepositoryAPI
+	Scans() IScanAPI
 }
 
 func NewCoreAPIClient(baseURL string) ICoreAPIClient {
@@ -16,7 +15,15 @@ func NewCoreAPIClient(baseURL string) ICoreAPIClient {
 	repositoryClient := NewRepositoryAPI(baseURL)
 	return CoreAPIClient{
 		baseURL:      baseURL,
-		Scans:        scanClient,
-		Repositories: repositoryClient,
+		scans:        scanClient,
+		repositories: repositoryClient,
 	}
+}
+
+func (c CoreAPIClient) Scans() IScanAPI {
+	return c.scans
+}
+
+func (c CoreAPIClient) Repositories() IRepositoryAPI {
+	return c.repositories
 }
