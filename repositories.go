@@ -15,7 +15,9 @@ type RepositoryAPI struct {
 	v2      string
 }
 
-type IRepositoryAPI interface{}
+type IRepositoryAPI interface {
+	GetRepositoryById(repositoryId int) (*model.Repository, error)
+}
 
 func NewRepositoryAPI(baseURL string) IRepositoryAPI {
 	v2 := fmt.Sprintf("%s/v2/repositories", baseURL)

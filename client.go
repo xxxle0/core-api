@@ -8,6 +8,7 @@ type CoreAPIClient struct {
 
 type ICoreAPIClient interface {
 	Scans() IScanAPI
+	Repositories() IRepositoryAPI
 }
 
 func NewCoreAPIClient(baseURL string) ICoreAPIClient {

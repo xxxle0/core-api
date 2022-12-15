@@ -14,7 +14,13 @@ type ScanAPI struct {
 	v2      string
 }
 
-type IScanAPI interface{}
+type IScanAPI interface {
+	GetScansOfRepository(repositoryId int) ([]model.Scan, error)
+	GetScans(repositoryId int, createdAt string) ([]model.Scan, error)
+	GetScanByIds(scanIds []string) ([]model.Scan, error)
+	InsertScans(scans []model.Scan) ([]model.Scan, error)
+	GetScanById(scanId string) (*model.Scan, error)
+}
 
 func NewScanAPI(baseURL string) IScanAPI {
 	v2 := fmt.Sprintf("%s/v2/scans", baseURL)
