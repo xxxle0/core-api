@@ -1,30 +1,30 @@
 package coreapi
 
-type CoreAPIClient struct {
+type CoreAPIClient[R any] struct {
 	baseURL      string
-	scans        IScanAPI
+	scans        IScanAPI[R]
 	repositories IRepositoryAPI
 }
 
-type ICoreAPIClient interface {
-	Scans() IScanAPI
+type ICoreAPIClient[R any] interface {
+	Scans() IScanAPI[R]
 	Repositories() IRepositoryAPI
 }
 
-func NewCoreAPIClient(baseURL string) ICoreAPIClient {
-	scanClient := NewScanAPI(baseURL)
+func NewCoreAPIClient[R any](baseURL string) ICoreAPIClient[R] {
+	scanClient := NewScanAPI[R](baseURL)
 	repositoryClient := NewRepositoryAPI(baseURL)
-	return CoreAPIClient{
+	return CoreAPIClient[R]{
 		baseURL:      baseURL,
 		scans:        scanClient,
 		repositories: repositoryClient,
 	}
 }
 
-func (c CoreAPIClient) Scans() IScanAPI {
+func (c CoreAPIClient[R]) Scans() IScanAPI[R] {
 	return c.scans
 }
 
-func (c CoreAPIClient) Repositories() IRepositoryAPI {
+func (c CoreAPIClient[R]) Repositories() IRepositoryAPI {
 	return c.repositories
 }
