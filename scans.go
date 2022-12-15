@@ -2,10 +2,11 @@ package coreapi
 
 import (
 	"bytes"
-	"common/coreapi/model"
 	"encoding/json"
 	"fmt"
 	"net/http"
+
+	"github.com/xxxle0/core-api/model"
 )
 
 type ScanAPI struct {

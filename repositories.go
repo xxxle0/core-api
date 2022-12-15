@@ -2,11 +2,12 @@ package coreapi
 
 import (
 	"bytes"
-	"common/coreapi/model"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/xxxle0/core-api/model"
 )
 
 type RepositoryAPI struct {
