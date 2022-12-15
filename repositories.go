@@ -6,29 +6,27 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-
-	"github.com/xxxle0/core-api/model"
 )
 
-type RepositoryAPI struct {
+type RepositoryAPI[R any] struct {
 	baseURL string
 	v2      string
 }
 
-type IRepositoryAPI interface {
-	GetRepositoryById(repositoryId int) (*model.Repository, error)
+type IRepositoryAPI[R any] interface {
+	GetRepositoryById(repositoryId int) (*R, error)
 }
 
-func NewRepositoryAPI(baseURL string) IRepositoryAPI {
+func NewRepositoryAPI[R any](baseURL string) IRepositoryAPI[R] {
 	v2 := fmt.Sprintf("%s/v2/repositories", baseURL)
-	return RepositoryAPI{
+	return RepositoryAPI[R]{
 		baseURL: baseURL,
 		v2:      v2,
 	}
 }
 
-func (c RepositoryAPI) GetRepositoryById(repositoryId int) (*model.Repository, error) {
-	var repository model.Repository
+func (c RepositoryAPI[R]) GetRepositoryById(repositoryId int) (*R, error) {
+	var repository R
 	url := fmt.Sprintf("%s/getRepositoryById", c.v2)
 	reqBody := map[string]interface{}{
 		"repositoryId": repositoryId,
