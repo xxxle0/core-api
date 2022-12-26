@@ -8,25 +8,23 @@ import (
 	"net/http"
 )
 
-type RepositoryAPI[R any] struct {
+type RepositoryAPI struct {
 	baseURL string
 	v2      string
 }
 
-type IRepositoryAPI[R any] interface {
-	GetRepositoryById(repositoryId int) (*R, error)
-}
+type IRepositoryAPI interface{}
 
-func NewRepositoryAPI[R any](baseURL string) IRepositoryAPI[R] {
+func NewRepositoryAPI(baseURL string) IRepositoryAPI {
 	v2 := fmt.Sprintf("%s/v2/repositories", baseURL)
-	return RepositoryAPI[R]{
+	return RepositoryAPI{
 		baseURL: baseURL,
 		v2:      v2,
 	}
 }
 
-func (c RepositoryAPI[R]) GetRepositoryById(repositoryId int) (*R, error) {
-	var repository R
+func (c RepositoryAPI) GetRepositoryById(repositoryId int) (interface{}, error) {
+	var repository interface{}
 	url := fmt.Sprintf("%s/getRepositoryById", c.v2)
 	reqBody := map[string]interface{}{
 		"repositoryId": repositoryId,

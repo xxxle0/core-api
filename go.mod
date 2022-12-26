@@ -1,3 +1,3 @@
-module github.com/xxxle0/core-api
+module common
 
 go 1.18

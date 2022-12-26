@@ -7,29 +7,23 @@ import (
 	"net/http"
 )
 
-type ScanAPI[R any] struct {
+type ScanAPI struct {
 	baseURL string
 	v2      string
 }
 
-type IScanAPI[R any] interface {
-	GetScansOfRepository(repositoryId int) ([]R, error)
-	GetScans(repositoryId int, createdAt string) ([]R, error)
-	GetScanByIds(scanIds []string) ([]R, error)
-	InsertScans(scans []R) ([]R, error)
-	GetScanById(scanId string) (*R, error)
-}
+type IScanAPI interface{}
 
-func NewScanAPI[R any](baseURL string) IScanAPI[R] {
+func NewScanAPI(baseURL string) IScanAPI {
 	v2 := fmt.Sprintf("%s/v2/scans", baseURL)
-	return ScanAPI[R]{
+	return ScanAPI{
 		baseURL: baseURL,
 		v2:      v2,
 	}
 }
 
-func (s ScanAPI[R]) GetScansOfRepository(repositoryId int) ([]R, error) {
-	var scans []R
+func (s ScanAPI) GetScansOfRepository(repositoryId int) (interface{}, error) {
+	var scans interface{}
 	url := fmt.Sprintf("%s/getScansOfRepository", s.v2)
 	body := map[string]int{
 		"repositoryId": repositoryId,
@@ -56,7 +50,8 @@ func (s ScanAPI[R]) GetScansOfRepository(repositoryId int) ([]R, error) {
 	return scans, nil
 }
 
-func (s ScanAPI[R]) GetScans(repositoryId int, createdAt string) ([]R, error) {
+func (s ScanAPI) GetScans(repositoryId int, createdAt string) (interface{}, error) {
+	var scans interface{}
 	url := fmt.Sprintf("%s/getScans", s.v2)
 	requestBody := map[string]interface{}{
 		"repositoryId": repositoryId,
@@ -77,7 +72,6 @@ func (s ScanAPI[R]) GetScans(repositoryId int, createdAt string) ([]R, error) {
 		return nil, err
 	}
 	defer res.Body.Close()
-	var scans []R
 	err = json.NewDecoder(res.Body).Decode(&scans)
 	if err != nil {
 		return nil, err
@@ -85,7 +79,7 @@ func (s ScanAPI[R]) GetScans(repositoryId int, createdAt string) ([]R, error) {
 	return scans, nil
 }
 
-func (s ScanAPI[R]) InsertScans(scans []R) ([]R, error) {
+func (s ScanAPI) InsertScans(scans interface{}) (interface{}, error) {
 	url := fmt.Sprintf("%s/insertScans", s.v2)
 	requestBody := map[string]interface{}{
 		"scans": scans,
@@ -105,7 +99,7 @@ func (s ScanAPI[R]) InsertScans(scans []R) ([]R, error) {
 		return nil, err
 	}
 	defer res.Body.Close()
-	var insertedScans []R
+	var insertedScans interface{}
 	err = json.NewDecoder(res.Body).Decode(&insertedScans)
 	if err != nil {
 		return nil, err
@@ -113,7 +107,7 @@ func (s ScanAPI[R]) InsertScans(scans []R) ([]R, error) {
 	return insertedScans, nil
 }
 
-func (s ScanAPI[R]) GetScanById(scanId string) (*R, error) {
+func (s ScanAPI) GetScanById(scanId string) (interface{}, error) {
 	url := fmt.Sprintf("%s/getScanById", s.v2)
 	requestBody := map[string]interface{}{
 		"scanId": scanId,
@@ -133,7 +127,7 @@ func (s ScanAPI[R]) GetScanById(scanId string) (*R, error) {
 		return nil, err
 	}
 	defer res.Body.Close()
-	var scan R
+	var scan interface{}
 	err = json.NewDecoder(res.Body).Decode(&scan)
 	if err != nil {
 		return nil, err
@@ -141,7 +135,7 @@ func (s ScanAPI[R]) GetScanById(scanId string) (*R, error) {
 	return &scan, nil
 }
 
-func (s ScanAPI[R]) GetScanByIds(scanIds []string) ([]R, error) {
+func (s ScanAPI) GetScanByIds(scanIds []string) (interface{}, error) {
 	url := fmt.Sprintf("%s/getScanById", s.v2)
 	requestBody := map[string]interface{}{
 		"scanIds": scanIds,
@@ -161,7 +155,7 @@ func (s ScanAPI[R]) GetScanByIds(scanIds []string) ([]R, error) {
 		return nil, err
 	}
 	defer res.Body.Close()
-	var scans []R
+	var scans interface{}
 	err = json.NewDecoder(res.Body).Decode(&scans)
 	if err != nil {
 		return nil, err
